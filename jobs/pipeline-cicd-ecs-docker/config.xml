@@ -1,0 +1,83 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1400.v7fd111b_ec82f">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2184.v0b_358b_953e69"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2184.v0b_358b_953e69">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description>Pipeline for a CICD deploy to ecs cluster .&#xd;
+Ensure the creation of ecs cluster beforehand and creation of ecr repo</description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3883.vb_3ff2a_e3eea_f">
+    <script>pipeline {
+    agent any
+    tools {
+      maven &quot;MAVEN3&quot;
+      jdk &quot;OracleJDK8&quot;
+  }
+
+    environment {
+        registryCredential = &apos;ecr:us-east-1:awsiamuser&apos;
+        appRegistry = &quot;247477386084.dkr.ecr.us-east-1.amazonaws.com/manav-ecr-repo&quot;
+        vprofileRegistry = &quot;https://247477386084.dkr.ecr.us-east-1.amazonaws.com/&quot;
+    cluster = &quot;vprofile&quot;
+    service = &quot;vprofileappsvc&quot;
+    }
+  stages {
+    stage(&apos;Fetch code&apos;){
+      steps {
+        git branch: &apos;docker&apos;, url: &apos;https://github.com/devopshydclub/vprofile-project.git&apos;
+      }
+    }
+
+
+    stage(&apos;Test&apos;){
+      steps {
+        sh &apos;mvn test&apos;
+      }
+    }
+
+    
+
+    stage(&apos;Build App Image&apos;) {
+       steps {
+       
+         script {
+                dockerImage = docker.build( appRegistry + &quot;:$BUILD_NUMBER&quot;, &quot;./Docker-files/app/multistage/&quot;)
+             }
+
+     }
+    
+    }
+
+    stage(&apos;Upload App Image&apos;) {
+          steps{
+            script {
+              docker.withRegistry( vprofileRegistry, registryCredential ) {
+                dockerImage.push(&quot;$BUILD_NUMBER&quot;)
+                dockerImage.push(&apos;latest&apos;)
+              }
+            }
+          }
+     }
+
+    stage(&apos;Deploy to ecs&apos;) {
+          steps {
+        withAWS(credentials: &apos;awsiamuser&apos;, region: &apos;us-east-1&apos;) {
+          sh &apos;aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment&apos;
+        }
+      }
+     }
+
+  }
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

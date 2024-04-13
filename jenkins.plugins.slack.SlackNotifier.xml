@@ -1,0 +1,11 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<jenkins.plugins.slack.SlackNotifier_-DescriptorImpl plugin="slack@684.v833089650554">
+  <baseUrl></baseUrl>
+  <teamDomain>jenkins-cicd-lab</teamDomain>
+  <tokenCredentialId>Slack_Token_jenkins-cicd-lab.slack.com</tokenCredentialId>
+  <botUser>false</botUser>
+  <sendAsText>false</sendAsText>
+  <iconEmoji></iconEmoji>
+  <username></username>
+  <room>my-proj-cicd</room>
+</jenkins.plugins.slack.SlackNotifier_-DescriptorImpl>

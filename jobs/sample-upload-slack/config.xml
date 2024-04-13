@@ -1,0 +1,47 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1400.v7fd111b_ec82f">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2184.v0b_358b_953e69"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2184.v0b_358b_953e69">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3883.vb_3ff2a_e3eea_f">
+    <script>pipeline {
+    agent any
+    
+    environment {
+        slack_channel = &quot;my-proj-cicd&quot;
+        file_name = &quot;example_file.txt&quot;
+    }
+    
+    stages {
+        stage(&apos;Create File&apos;) {
+            steps {
+                script {
+                    writeFile file: &quot;${file_name}&quot;, text: &quot;This is an example text file.&quot;
+                }
+            }
+        }
+        
+        stage(&apos;Upload File to Slack&apos;) {
+            steps {
+                script {
+                    slackUploadFile channel: &quot;${slack_channel}&quot;, filePath: &quot;${file_name}&quot;
+                }
+            }
+        }
+    }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

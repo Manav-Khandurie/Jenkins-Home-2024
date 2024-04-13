@@ -1,0 +1,18 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<org.jenkinsci.plugins.globalslack.GlobalSlackNotifier_-DescriptorImpl plugin="global-slack-notifier@1.5">
+  <successRoom></successRoom>
+  <successMessage></successMessage>
+  <notifyOnSuccess>false</notifyOnSuccess>
+  <failureRoom></failureRoom>
+  <failureMessage></failureMessage>
+  <notifyOnFail>false</notifyOnFail>
+  <unstableRoom></unstableRoom>
+  <unstableMessage></unstableMessage>
+  <notifyOnUnstable>false</notifyOnUnstable>
+  <notBuiltRoom></notBuiltRoom>
+  <notBuiltMessage></notBuiltMessage>
+  <notifyOnNotBuilt>false</notifyOnNotBuilt>
+  <abortedRoom></abortedRoom>
+  <abortedMessage></abortedMessage>
+  <notifyOnAborted>false</notifyOnAborted>
+</org.jenkinsci.plugins.globalslack.GlobalSlackNotifier_-DescriptorImpl>

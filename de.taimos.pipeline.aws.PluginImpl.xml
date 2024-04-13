@@ -1,0 +1,4 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<de.taimos.pipeline.aws.PluginImpl plugin="pipeline-aws@1.45">
+  <enableCredentialsFromNode>false</enableCredentialsFromNode>
+</de.taimos.pipeline.aws.PluginImpl>
